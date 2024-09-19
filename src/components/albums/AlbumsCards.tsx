@@ -1,4 +1,4 @@
-import { AlbumElement } from "@/interfaces/mainpage.interface";
+import { AlbumElement } from "@/interfaces/MainPage.interface";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";

@@ -2,7 +2,7 @@
 import { PlayerControls } from "@/components/player-controls/PlayerControls";
 import { SongList } from "@/components/song-list/SongList";
 import { SongHeader } from "@/components/track-details/elements";
-import { AlbumElement } from "@/interfaces/mainpage.interface";
+import { AlbumElement } from "@/interfaces/MainPage.interface";
 import { getAlbumDetails } from "@/services/services";
 import { useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";

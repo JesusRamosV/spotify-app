@@ -3,7 +3,7 @@ import {
   RecommendationsSection,
   SongHeader,
 } from "@/components/track-details/elements";
-import { TracksItem } from "@/interfaces/mainpage.interface";
+import { TracksItem } from "@/interfaces/MainPage.interface";
 import { getTrackDetails } from "@/services/services";
 import { useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";

@@ -1,7 +1,7 @@
 "use client";
 
 import { Pagination, SongList } from "@/components";
-import { labels, Tracks, TypeSearch } from "@/interfaces/mainpage.interface";
+import { labels, Tracks, TypeSearch } from "@/interfaces/MainPage.interface";
 import { searchSpotify } from "@/services/services";
 import { useSession } from "next-auth/react";
 import Image from "next/image";

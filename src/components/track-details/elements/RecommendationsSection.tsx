@@ -1,6 +1,6 @@
 "use client";
 import { SongList } from "@/components/song-list/SongList";
-import { TracksItem } from "@/interfaces/mainpage.interface";
+import { TracksItem } from "@/interfaces/MainPage.interface";
 import { getRecommendations } from "@/services/services";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";

@@ -1,5 +1,5 @@
 import { convertMillisecondsToMinutesAndSeconds } from "@/app/global/helpers";
-import { Artist, labels } from "@/interfaces/mainpage.interface";
+import { Artist, labels } from "@/interfaces/MainPage.interface";
 import Image from "next/image";
 
 interface Props {

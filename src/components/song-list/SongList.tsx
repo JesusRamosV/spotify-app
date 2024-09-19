@@ -1,6 +1,6 @@
 "use client";
 import { convertMillisecondsToMinutesAndSeconds } from "@/app/global/helpers";
-import { Artist } from "@/interfaces/mainpage.interface";
+import { Artist } from "@/interfaces/MainPage.interface";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";

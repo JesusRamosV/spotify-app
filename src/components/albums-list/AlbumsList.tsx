@@ -1,6 +1,6 @@
 "use client";
 import { AlbumsCards, Pagination } from "@/components";
-import { Albums, TypeSearch } from "@/interfaces/mainpage.interface";
+import { Albums, TypeSearch } from "@/interfaces/MainPage.interface";
 import { searchSpotify } from "@/services/services";
 import { useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";

@@ -1,6 +1,6 @@
 "use client";
 import { Pagination } from "@/components";
-import { Artists, TypeSearch } from "@/interfaces/mainpage.interface";
+import { Artists, TypeSearch } from "@/interfaces/MainPage.interface";
 import { searchSpotify } from "@/services/services";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
