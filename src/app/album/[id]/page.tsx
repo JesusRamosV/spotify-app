@@ -7,9 +7,9 @@ interface Props {
   };
 }
 
-const page = ({ params }: Props) => {
+const AlbumsPage = ({ params }: Props) => {
   const { id } = params;
   return <AlbumDetails id={id} />;
 };
 
-export default page;
+export default AlbumsPage;

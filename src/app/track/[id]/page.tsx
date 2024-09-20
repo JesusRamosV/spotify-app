@@ -7,7 +7,7 @@ interface Props {
   };
 }
 
-export default function page({ params }: Props) {
+export default function TrackPage({ params }: Props) {
   const { id } = params;
   return (
     <>
