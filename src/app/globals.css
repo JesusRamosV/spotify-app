@@ -25,3 +25,19 @@ body {
     text-wrap: balance;
   }
 }
+
+
+::-webkit-scrollbar {
+  width: 12px; /* Ancho del scrollbar */
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f100; /* Color del track del scrollbar */
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #959695; /* Color del thumb del scrollbar */
+  border-radius: 10px; /* Radio del thumb del scrollbar */
+  border: 3px solid #f1f1f1; /* Borde alrededor del thumb del scrollbar */
+}

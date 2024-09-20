@@ -8,7 +8,7 @@ const authOptions = {
       clientId: process.env.SPOTIFY_CLIENT_ID as string,
       clientSecret: process.env.SPOTIFY_CLIENT_SECRET as string,
       authorization:
-        "https://accounts.spotify.com/authorize?scope=user-read-email,user-read-private,user-library-read,user-library-modify,streaming",
+        "https://accounts.spotify.com/authorize?scope=user-modify-playback-state,user-read-playback-state,user-follow-read,user-read-email,user-read-private,user-read-currently-playing,user-library-read,user-library-modify,user-follow-modify,streaming",
       profile: (profile) => {
         return {
           id: profile.id,

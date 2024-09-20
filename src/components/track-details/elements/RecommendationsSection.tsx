@@ -1,5 +1,5 @@
 "use client";
-import { SongList } from "@/components/song-list/SongList";
+import { MediaControls, SongList, SongListSkeletonWrapper } from "@/components";
 import { TracksItem } from "@/interfaces/MainPage.interface";
 import { getRecommendations } from "@/services/services";
 import { useSession } from "next-auth/react";
@@ -11,7 +11,7 @@ interface Props {
 
 export const RecommendationsSection = ({ id }: Props) => {
   const [results, setResults] = useState<TracksItem[]>([]);
-  console.log("🚀 ~ RecommendationsSection ~ results:", results);
+  const [isLoading, setIsLoading] = useState(false);
   const { data: session } = useSession();
 
   useEffect(() => {
@@ -22,6 +22,7 @@ export const RecommendationsSection = ({ id }: Props) => {
   }, [id, session?.accessToken]);
 
   const handleSearch = async (query: string) => {
+    setIsLoading(true);
     try {
       const data = await getRecommendations(
         query,
@@ -30,13 +31,17 @@ export const RecommendationsSection = ({ id }: Props) => {
       setResults(data.tracks);
     } catch (error) {
       console.error("Error al buscar:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
   return (
     <div className="mb-[40px] p-4">
+      <MediaControls id={id} type="track" />
       <h2 className="text-white text-2xl font-bold mb-4">Recomendaciones</h2>
       <p className="text-gray-400 mb-4">Basadas en esta canción</p>
       <ul className="space-y-4">
+        {isLoading && <SongListSkeletonWrapper count={5} />}
         {results.map((song, index) => {
           const data = {
             id: song?.id,
@@ -46,6 +51,8 @@ export const RecommendationsSection = ({ id }: Props) => {
             type: song?.type,
             artists: song?.artists,
             duration_ms: song?.duration_ms,
+            context_uri: song?.album?.uri,
+            track_number: song?.track_number,
           };
           return <SongList key={index} data={data} />;
         })}

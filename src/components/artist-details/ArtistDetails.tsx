@@ -1,10 +1,11 @@
 "use client";
-import { ArtistAlbums, PlayerControls, PopularTracks } from "@/components";
+import { ArtistAlbums, PopularTracks } from "@/components";
 import { ArtistDetail } from "@/interfaces/ArtistDetail.interface";
 import { getArtistDetails } from "@/services/services";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
+import { MdVerified } from "react-icons/md";
 
 interface Props {
   id: string;
@@ -12,7 +13,6 @@ interface Props {
 
 export const ArtistDetails = ({ id }: Props) => {
   const [results, setResults] = useState<ArtistDetail>();
-  console.log("🚀 ~ ArtistDetails ~ results:", results);
   const { data: session } = useSession();
 
   useEffect(() => {
@@ -51,13 +51,7 @@ export const ArtistDetails = ({ id }: Props) => {
         ))}
         <div className="absolute bottom-0 left-0 p-6 bg-gradient-to-t from-black to-transparent w-full">
           <div className="flex items-center mb-2">
-            <svg
-              className="w-5 h-5 text-blue-400 mr-2"
-              viewBox="0 0 24 24"
-              fill="currentColor"
-            >
-              <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" />
-            </svg>
+            <MdVerified className="text-cyan-400 text-2xl mr-2" />
             <span className="text-sm font-medium">Artista verificado</span>
           </div>
           <h1 className="text-7xl font-bold mb-2">{results?.name}</h1>
@@ -69,7 +63,6 @@ export const ArtistDetails = ({ id }: Props) => {
 
       {/* Content */}
       <div className="px-6">
-        <PlayerControls />
         <PopularTracks id={id} />
         <ArtistAlbums albums={id} />
       </div>

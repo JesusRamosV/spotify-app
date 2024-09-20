@@ -2,7 +2,8 @@
 import {
   RecommendationsSection,
   SongHeader,
-} from "@/components/track-details/elements";
+  HeaderSkeleton,
+} from "@/components";
 import { TracksItem } from "@/interfaces/MainPage.interface";
 import { getTrackDetails } from "@/services/services";
 import { useSession } from "next-auth/react";
@@ -14,8 +15,8 @@ interface Props {
 
 export const TrackDetails = ({ id }: Props) => {
   const [track, setTrack] = useState<TracksItem>();
-  console.log("🚀 ~ TrackDetails ~ results:", track);
   const { data: session } = useSession();
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (id && session?.accessToken) {
@@ -28,11 +29,14 @@ export const TrackDetails = ({ id }: Props) => {
   }, [id, session?.accessToken]);
 
   const handleSearch = async (query: string) => {
+    setIsLoading(true);
     try {
       const data = await getTrackDetails(query, session?.accessToken as string);
       setTrack(data);
     } catch (error) {
       console.error("Error al buscar:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -48,9 +52,9 @@ export const TrackDetails = ({ id }: Props) => {
     <div className="">
       <main className="flex flex-col mx-auto px-4 py-2">
         <div className="overflow-auto p-2 bg-gradient-to-b from-gray-400 to-gray-800">
+          {isLoading && <HeaderSkeleton />}
           {track && <SongHeader track={songHeader} />}
         </div>
-
         <RecommendationsSection id={id} />
       </main>
     </div>

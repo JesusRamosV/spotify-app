@@ -143,3 +143,23 @@ export const labels: Record<Type | string, string> = {
   artist: "Artista",
   single: "Sencillo",
 };
+
+export interface Favorites {
+  added_at: Date;
+  album?: AlbumElement;
+  track?: TracksItem;
+}
+
+export interface ItemsFavorites {
+  id: string;
+  name: string;
+  artists: Artist[];
+  image: string;
+  type: Type;
+}
+
+export const tabs = [
+  { id: "track", label: "Canciones" },
+  { id: "artist", label: "Artistas" },
+  { id: "album", label: "Álbumes" },
+];

@@ -1,6 +1,6 @@
 "use client";
 
-import { Pagination, SongList } from "@/components";
+import { Pagination, SongList, SongListSkeletonWrapper } from "@/components";
 import { labels, Tracks, TypeSearch } from "@/interfaces/MainPage.interface";
 import { searchSpotify } from "@/services/services";
 import { useSession } from "next-auth/react";
@@ -18,6 +18,7 @@ export const Songs = ({ songs }: Props) => {
   const [results, setResults] = useState<Tracks>();
   const [pageIndex, setPageIndex] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
   const { data: session } = useSession();
 
   useEffect(() => {
@@ -28,6 +29,7 @@ export const Songs = ({ songs }: Props) => {
   }, [songs, session?.accessToken, pageIndex]);
 
   const handleSearch = async (query: string) => {
+    setIsLoading(true);
     try {
       const data = await searchSpotify(
         query,
@@ -40,6 +42,8 @@ export const Songs = ({ songs }: Props) => {
       setTotalPages(Math.ceil(data.tracks.total / TOTAL_PAGE_SIZE));
     } catch (error) {
       console.error("Error al buscar:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -100,6 +104,7 @@ export const Songs = ({ songs }: Props) => {
             <span className="flex-grow">Titulo</span>
             <GoClock size={20} />
           </li>
+          {isLoading && <SongListSkeletonWrapper count={TOTAL_PAGE_SIZE} />}
           {results?.items?.map((song, index) => {
             const data = {
               id: song?.id,
@@ -109,6 +114,8 @@ export const Songs = ({ songs }: Props) => {
               type: song?.type,
               artists: song?.artists,
               duration_ms: song?.duration_ms,
+              context_uri: song?.album?.uri,
+              track_number: song?.track_number,
             };
             return <SongList key={index} data={data} index={index + 1} />;
           })}

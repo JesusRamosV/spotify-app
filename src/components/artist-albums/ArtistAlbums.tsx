@@ -47,7 +47,7 @@ export const ArtistAlbums = ({ albums }: Props) => {
   };
 
   return (
-    <section className="mt-8">
+    <section className="mt-8 mb-32">
       <div className="flex items-center pb-2">
         <h2 className="text-2xl font-bold ">Discografía</h2>
         <Pagination

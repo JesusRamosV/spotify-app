@@ -1,10 +1,11 @@
 "use client";
-import { Footer, TopMenu } from "@/components";
+import { Footer, Sidebar, TopMenu } from "@/components";
 import { titleFont } from "@/config/fonts";
 import { SessionProvider } from "next-auth/react";
 import Head from "next/head";
 import "./globals.css";
 import { Flowbite } from "flowbite-react";
+import { Snackbar } from "@/store";
 
 export default function RootLayout({
   children,
@@ -20,11 +21,15 @@ export default function RootLayout({
         </Head>
         <html lang="en">
           <body className={`${titleFont.className} antialiased`}>
-            <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black text-white">
+            <div className="fixed top-0 left-0 right-0 z-50">
               <TopMenu />
-              <div className="mb-[60px]">{children}</div>
-              <Footer />
             </div>
+            <div className="flex h-screen bg-gradient-to-b from-gray-900 to-black text-white py-[73px] overflow-hidden	">
+              <Sidebar />
+              <div className=" overflow-y-auto flex-1">{children}</div>
+            </div>
+            <Footer />
+            <Snackbar />
           </body>
         </html>
       </SessionProvider>

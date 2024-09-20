@@ -1,7 +1,8 @@
+import { SearchPrompt } from "@/components";
 import React from "react";
 
 const page = () => {
-  return <div>Page</div>;
+  return <SearchPrompt />;
 };
 
 export default page;

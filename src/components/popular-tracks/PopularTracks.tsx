@@ -1,5 +1,5 @@
 "use client";
-import { SongList } from "@/components";
+import { MediaControls, SongList, SongListSkeletonWrapper } from "@/components";
 import { TracksItem } from "@/interfaces/MainPage.interface";
 import { getPopularTracks } from "@/services/services";
 import { useSession } from "next-auth/react";
@@ -11,6 +11,7 @@ interface Props {
 
 export const PopularTracks = ({ id }: Props) => {
   const [results, setResults] = useState<TracksItem[]>();
+  const [isLoading, setIsLoading] = useState(false);
   const { data: session } = useSession();
 
   useEffect(() => {
@@ -21,6 +22,7 @@ export const PopularTracks = ({ id }: Props) => {
   }, [id, session?.accessToken]);
 
   const handleSearch = async (query: string) => {
+    setIsLoading(true);
     try {
       const data = await getPopularTracks(
         query,
@@ -29,14 +31,18 @@ export const PopularTracks = ({ id }: Props) => {
       setResults(data.tracks);
     } catch (error) {
       console.error("Error al buscar:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
     <div>
+      <MediaControls id={id} type="artist" />
       <h2 className="text-2xl font-bold mb-4">Populares</h2>
 
       <div className="space-y-4">
+        {isLoading && <SongListSkeletonWrapper count={5} />}
         {results?.slice(0, 5)?.map((song, index) => {
           const data = {
             id: song?.id,
@@ -46,6 +52,8 @@ export const PopularTracks = ({ id }: Props) => {
             type: song?.type,
             artists: song?.artists,
             duration_ms: song?.duration_ms,
+            context_uri: song?.album?.uri,
+            track_number: song?.track_number,
           };
           return <SongList key={index} data={data} />;
         })}

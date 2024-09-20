@@ -13,8 +13,6 @@ export const Pagination = ({
   totalPages,
   onPageChange,
 }: Props) => {
-  console.log(currentPage, totalPages);
-
   return (
     <div className="flex overflow-x-auto ml-auto sm:justify-center">
       <PaginationLib
