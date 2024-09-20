@@ -12,11 +12,7 @@ import { useSession } from "next-auth/react";
 import React, { useEffect } from "react";
 import { CgAdd } from "react-icons/cg";
 import { HiCheckCircle } from "react-icons/hi";
-import {
-  IoPauseCircleSharp,
-  IoPauseSharp,
-  IoPlayCircleSharp,
-} from "react-icons/io5";
+import { IoPauseCircleSharp, IoPlayCircleSharp } from "react-icons/io5";
 
 interface Props {
   id: string;

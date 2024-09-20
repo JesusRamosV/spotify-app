@@ -46,7 +46,7 @@ export const CurrentTrack = () => {
 
       return () => clearInterval(intervalId);
     }
-  }, [session?.accessToken, setPlaying]);
+  }, [session?.accessToken, setPlaying, addAlert]);
 
   return (
     <>

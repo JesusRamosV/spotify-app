@@ -1,7 +1,7 @@
 import Link from "next/link";
 import React from "react";
 
-import { LuDisc, LuFrown, LuHome, LuSearch } from "react-icons/lu";
+import { LuDisc, LuFrown, LuHome } from "react-icons/lu";
 
 export const NotFound = () => {
   return (
