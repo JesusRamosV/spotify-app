@@ -6,6 +6,7 @@ import {
 } from "@/components";
 import { TracksItem } from "@/interfaces/MainPage.interface";
 import { getTrackDetails } from "@/services/services";
+import { useSnackbarStore } from "@/store";
 import { useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
 
@@ -17,6 +18,7 @@ export const TrackDetails = ({ id }: Props) => {
   const [track, setTrack] = useState<TracksItem>();
   const { data: session } = useSession();
   const [isLoading, setIsLoading] = useState(false);
+  const { addAlert } = useSnackbarStore();
 
   useEffect(() => {
     if (id && session?.accessToken) {
@@ -34,7 +36,10 @@ export const TrackDetails = ({ id }: Props) => {
       const data = await getTrackDetails(query, session?.accessToken as string);
       setTrack(data);
     } catch (error) {
-      console.error("Error al buscar:", error);
+      addAlert({
+        msg: "Error al buscar el detalle de la canción",
+        severity: "error",
+      });
     } finally {
       setIsLoading(false);
     }
@@ -55,7 +60,11 @@ export const TrackDetails = ({ id }: Props) => {
           {isLoading && <HeaderSkeleton />}
           {track && <SongHeader track={songHeader} />}
         </div>
-        <RecommendationsSection id={id} />
+        <RecommendationsSection
+          id={id}
+          context_uri={track?.album?.uri as string}
+          track_number={track?.track_number as number}
+        />
       </main>
     </div>
   );

@@ -173,11 +173,25 @@ export const setChangeTrack = async (token: string, type: string) => {
   }
 };
 
-export const setChangeState = async (token: string, state: boolean) => {
+export const setChangeState = async (
+  token: string,
+  state: boolean,
+  context_uri: string = "",
+  track_number: number = 0
+) => {
   try {
+    const body =
+      context_uri === ""
+        ? {}
+        : {
+            context_uri,
+            offset: { position: track_number - 1 },
+            position_ms: 0,
+          };
+
     const response = await spotifyApi.put(
       `/me/player/${state ? "play" : "pause"}`,
-      {},
+      body,
       {
         headers: {
           Authorization: `Bearer ${token}`,

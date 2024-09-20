@@ -8,6 +8,7 @@ import {
 } from "@/components";
 import { AlbumElement } from "@/interfaces/MainPage.interface";
 import { getAlbumDetails } from "@/services/services";
+import { useSnackbarStore } from "@/store";
 import { useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
 import { GoClock } from "react-icons/go";
@@ -19,6 +20,7 @@ interface Props {
 export const AlbumDetails = ({ id }: Props) => {
   const [album, setAlbum] = useState<AlbumElement>();
   const [isLoading, setIsLoading] = useState(false);
+  const { addAlert } = useSnackbarStore();
   const { data: session } = useSession();
 
   useEffect(() => {
@@ -37,7 +39,7 @@ export const AlbumDetails = ({ id }: Props) => {
       const data = await getAlbumDetails(query, session?.accessToken as string);
       setAlbum(data);
     } catch (error) {
-      console.error("Error al buscar:", error);
+      addAlert({ msg: "Error al buscar", severity: "error" });
     } finally {
       setIsLoading(false);
     }

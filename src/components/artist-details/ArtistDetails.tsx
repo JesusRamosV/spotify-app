@@ -2,6 +2,7 @@
 import { ArtistAlbums, PopularTracks } from "@/components";
 import { ArtistDetail } from "@/interfaces/ArtistDetail.interface";
 import { getArtistDetails } from "@/services/services";
+import { useSnackbarStore } from "@/store";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
@@ -14,6 +15,7 @@ interface Props {
 export const ArtistDetails = ({ id }: Props) => {
   const [results, setResults] = useState<ArtistDetail>();
   const { data: session } = useSession();
+  const { addAlert } = useSnackbarStore();
 
   useEffect(() => {
     if (id && session?.accessToken) {
@@ -30,7 +32,10 @@ export const ArtistDetails = ({ id }: Props) => {
       );
       setResults(data);
     } catch (error) {
-      console.error("Error al buscar:", error);
+      addAlert({
+        msg: "Error obteniendo los detalles del artista",
+        severity: "error",
+      });
     }
   };
 

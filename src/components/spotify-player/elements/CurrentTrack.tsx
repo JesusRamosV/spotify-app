@@ -1,7 +1,7 @@
 "use client";
 import { Artist } from "@/interfaces/MainPage.interface";
 import { getCurrentTrack, getPlayerState } from "@/services/services";
-import { usePlayerStore } from "@/store";
+import { usePlayerStore, useSnackbarStore } from "@/store";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import React, { useEffect } from "react";
@@ -10,7 +10,8 @@ const POLLING_INTERVAL = 5000;
 
 export const CurrentTrack = () => {
   const { data: session } = useSession();
-  const { currentPlaying, setPlaying, setPlayerState } = usePlayerStore();
+  const { currentPlaying, setPlaying } = usePlayerStore();
+  const { addAlert } = useSnackbarStore();
   useEffect(() => {
     if (session?.accessToken) {
       const getCurrentTrackData = async () => {
@@ -31,10 +32,12 @@ export const CurrentTrack = () => {
               volume: dataPlayerState?.device?.volume_percent,
               pausing: dataPlayerState?.actions?.disallows?.pausing || false,
             });
-            setPlayerState(true);
           }
         } catch (error) {
-          console.error("Error al obtener la canción actual:", error);
+          addAlert({
+            msg: "Error al obtener la canción actual",
+            severity: "error",
+          });
         }
       };
       getCurrentTrackData();
@@ -43,7 +46,7 @@ export const CurrentTrack = () => {
 
       return () => clearInterval(intervalId);
     }
-  }, [session?.accessToken, setPlayerState, setPlaying]);
+  }, [session?.accessToken, setPlaying]);
 
   return (
     <>

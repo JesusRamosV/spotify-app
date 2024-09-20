@@ -2,6 +2,7 @@
 import { Pagination } from "@/components";
 import { Artists, TypeSearch } from "@/interfaces/MainPage.interface";
 import { searchSpotify } from "@/services/services";
+import { useSnackbarStore } from "@/store";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
@@ -18,6 +19,8 @@ export const ArtistsList = ({ artists }: Props) => {
   const [pageIndex, setPageIndex] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
   const { data: session } = useSession();
+  const { addAlert } = useSnackbarStore();
+
   useEffect(() => {
     if (artists && session?.accessToken) {
       setTimeout(() => {
@@ -40,7 +43,10 @@ export const ArtistsList = ({ artists }: Props) => {
       setResults(data.artists);
       setTotalPages(Math.ceil(data.artists.total / TOTAL_PAGE_SIZE));
     } catch (error) {
-      console.error("Error al buscar:", error);
+      addAlert({
+        msg: "Error al buscar el listado de artistas",
+        severity: "error",
+      });
     }
   };
 

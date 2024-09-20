@@ -2,6 +2,7 @@
 import { MediaControls, SongList, SongListSkeletonWrapper } from "@/components";
 import { TracksItem } from "@/interfaces/MainPage.interface";
 import { getPopularTracks } from "@/services/services";
+import { useSnackbarStore } from "@/store";
 import { useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
 
@@ -13,6 +14,7 @@ export const PopularTracks = ({ id }: Props) => {
   const [results, setResults] = useState<TracksItem[]>();
   const [isLoading, setIsLoading] = useState(false);
   const { data: session } = useSession();
+  const { addAlert } = useSnackbarStore();
 
   useEffect(() => {
     if (id && session?.accessToken) {
@@ -30,7 +32,10 @@ export const PopularTracks = ({ id }: Props) => {
       );
       setResults(data.tracks);
     } catch (error) {
-      console.error("Error al buscar:", error);
+      addAlert({
+        msg: "Error al buscar las canciones mas populares",
+        severity: "error",
+      });
     } finally {
       setIsLoading(false);
     }

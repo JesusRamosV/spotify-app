@@ -1,3 +1,4 @@
+import Link from "next/link";
 import React from "react";
 
 import { LuDisc, LuFrown, LuHome, LuSearch } from "react-icons/lu";
@@ -20,14 +21,12 @@ export const NotFound = () => {
         Parece que la página que buscas se ha perdido en el remix.
       </p>
       <div className="flex space-x-6">
-        <button className="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-full flex items-center transition duration-300">
-          <LuHome size={24} className="mr-2" />
-          Ir al inicio
-        </button>
-        <button className="bg-[#333333] hover:bg-[#444444] text-white font-bold py-3 px-6 rounded-full flex items-center transition duration-300">
-          <LuSearch size={24} className="mr-2" />
-          Buscar música
-        </button>
+        <Link href="/">
+          <button className="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-full flex items-center transition duration-300">
+            <LuHome size={24} className="mr-2" />
+            Ir al inicio
+          </button>
+        </Link>
       </div>
     </div>
   );

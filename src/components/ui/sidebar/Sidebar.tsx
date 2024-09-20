@@ -12,7 +12,7 @@ import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import { BiLibrary } from "react-icons/bi";
-import { useFavoriteStore } from "@/store";
+import { useFavoriteStore, useSnackbarStore } from "@/store";
 
 export const Sidebar = () => {
   const { data: session } = useSession();
@@ -20,6 +20,7 @@ export const Sidebar = () => {
   const [itemTypeCurrent, setItemTypeCurrent] = useState("track");
   const [isLoading, setIsLoading] = useState(false);
   const { isChangeFavorite, setIsChangeFavorite } = useFavoriteStore();
+  const { addAlert } = useSnackbarStore();
 
   useEffect(() => {
     if (session?.accessToken) {
@@ -75,7 +76,10 @@ export const Sidebar = () => {
             setDataResult(artists);
           }
         } catch (error) {
-          console.error("Error al obtener las canciones favoritas:", error);
+          addAlert({
+            msg: "Error al obtener las canciones favoritas",
+            severity: "error",
+          });
         } finally {
           setIsLoading(false);
         }

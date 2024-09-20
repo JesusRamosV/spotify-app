@@ -17,7 +17,7 @@ interface Props {
 
 export const SongHeader = ({ track }: Props) => {
   return (
-    <div className="flex items-start h-[170px]">
+    <div className="flex items-start">
       <Image
         src={track.image}
         alt={track.name}

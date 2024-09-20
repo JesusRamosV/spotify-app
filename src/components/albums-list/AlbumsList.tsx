@@ -2,6 +2,7 @@
 import { AlbumsCards, Pagination } from "@/components";
 import { Albums, TypeSearch } from "@/interfaces/MainPage.interface";
 import { searchSpotify } from "@/services/services";
+import { useSnackbarStore } from "@/store";
 import { useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
 
@@ -16,6 +17,7 @@ export const AlbumsList = ({ albums }: Props) => {
   const [pageIndex, setPageIndex] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
   const { data: session } = useSession();
+  const { addAlert } = useSnackbarStore();
 
   useEffect(() => {
     if (albums && session?.accessToken) {
@@ -39,7 +41,7 @@ export const AlbumsList = ({ albums }: Props) => {
       setResults(data.albums);
       setTotalPages(Math.ceil(data.albums.total / TOTAL_PAGE_SIZE));
     } catch (error) {
-      console.error("Error al buscar:", error);
+      addAlert({ msg: "Error al buscar los albumes", severity: "error" });
     }
   };
 

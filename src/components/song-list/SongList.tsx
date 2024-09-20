@@ -36,10 +36,14 @@ interface Props {
 
 export const SongList = ({ data, index }: Props) => {
   const { data: session } = useSession();
-  const { setPlaying, setPlayerState } = usePlayerStore();
+  const { setPlaying } = usePlayerStore();
   const { addAlert } = useSnackbarStore();
-  const { favorites, isChangeFavorite, setIsChangeFavorite, setFavorites } =
-    useFavoriteStore();
+  const {
+    tracksFavorites,
+    isChangeFavorite,
+    setIsChangeFavorite,
+    setTracksFavorites,
+  } = useFavoriteStore();
   const [isViewAddSong, setIsViewAddSong] = useState(false);
 
   useEffect(() => {
@@ -56,10 +60,12 @@ export const SongList = ({ data, index }: Props) => {
             return track?.id;
           });
 
-          setFavorites(tracks);
+          setTracksFavorites(tracks);
         } catch (error) {
-          console.error("Error al obtener las canciones favoritas:", error);
-        } finally {
+          addAlert({
+            msg: "Error al obtener las canciones favoritas",
+            severity: "error",
+          });
         }
       };
       fetchFavorites();
@@ -125,10 +131,9 @@ export const SongList = ({ data, index }: Props) => {
           volume: 0,
         };
         setPlaying(currentPlaying);
-        setPlayerState(true);
       }
     } catch (error) {
-      console.error("Error al reproducir la canción:", error);
+      addAlert({ msg: "Error al reproducir la canción", severity: "error" });
     }
   };
   return (
@@ -165,7 +170,7 @@ export const SongList = ({ data, index }: Props) => {
           ))}
         </div>
       </div>
-      {isViewAddSong && favorites?.includes(data.id) ? (
+      {isViewAddSong && tracksFavorites?.includes(data.id) ? (
         <HiCheckCircle
           onClick={removeFavorite}
           className="text-green-400 transition-all cursor-pointer"

@@ -2,17 +2,25 @@
 import { MediaControls, SongList, SongListSkeletonWrapper } from "@/components";
 import { TracksItem } from "@/interfaces/MainPage.interface";
 import { getRecommendations } from "@/services/services";
+import { useSnackbarStore } from "@/store";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 
 interface Props {
   id: string;
+  context_uri: string;
+  track_number: number;
 }
 
-export const RecommendationsSection = ({ id }: Props) => {
+export const RecommendationsSection = ({
+  id,
+  context_uri,
+  track_number,
+}: Props) => {
   const [results, setResults] = useState<TracksItem[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const { data: session } = useSession();
+  const { addAlert } = useSnackbarStore();
 
   useEffect(() => {
     if (id && session?.accessToken) {
@@ -30,14 +38,23 @@ export const RecommendationsSection = ({ id }: Props) => {
       );
       setResults(data.tracks);
     } catch (error) {
-      console.error("Error al buscar:", error);
+      addAlert({
+        msg: "Error al buscar las canciones recomendadas",
+        severity: "error",
+      });
     } finally {
       setIsLoading(false);
     }
   };
   return (
     <div className="mb-[40px] p-4">
-      <MediaControls id={id} type="track" />
+      <MediaControls
+        id={id}
+        type="track"
+        context_uri={context_uri}
+        track_number={track_number}
+      />
+
       <h2 className="text-white text-2xl font-bold mb-4">Recomendaciones</h2>
       <p className="text-gray-400 mb-4">Basadas en esta canción</p>
       <ul className="space-y-4">

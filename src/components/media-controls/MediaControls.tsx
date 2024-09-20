@@ -5,24 +5,54 @@ import {
   addToFavorites,
   getFavorites,
   removeFromFavorites,
+  setChangeState,
 } from "@/services/services";
-import { useFavoriteStore, useSnackbarStore } from "@/store";
+import { useFavoriteStore, usePlayerStore, useSnackbarStore } from "@/store";
 import { useSession } from "next-auth/react";
 import React, { useEffect } from "react";
 import { CgAdd } from "react-icons/cg";
 import { HiCheckCircle } from "react-icons/hi";
-import { IoPlayCircleSharp } from "react-icons/io5";
+import {
+  IoPauseCircleSharp,
+  IoPauseSharp,
+  IoPlayCircleSharp,
+} from "react-icons/io5";
 
 interface Props {
   id: string;
   type: string;
+  context_uri?: string;
+  track_number?: number;
 }
 
-export const MediaControls = ({ id, type }: Props) => {
+export const MediaControls = ({
+  id,
+  type,
+  context_uri,
+  track_number,
+}: Props) => {
   const { data: session } = useSession();
   const { addAlert } = useSnackbarStore();
-  const { favorites, isChangeFavorite, setIsChangeFavorite, setFavorites } =
-    useFavoriteStore();
+  const {
+    tracksFavorites,
+    isChangeFavorite,
+    setIsChangeFavorite,
+    setTracksFavorites,
+    setAlbumsFavorites,
+    setArtistsFavorites,
+    artistsFavorites,
+    albumsFavorites,
+  } = useFavoriteStore();
+  const { currentPlaying } = usePlayerStore();
+
+  const changeState = async (state: boolean) => {
+    await setChangeState(
+      session?.accessToken as string,
+      state,
+      context_uri,
+      track_number
+    );
+  };
 
   useEffect(() => {
     if (session?.accessToken) {
@@ -33,13 +63,13 @@ export const MediaControls = ({ id, type }: Props) => {
             type
           );
 
-          if (type === "track") {
+          if (type === "tracks") {
             const tracks = response?.items?.map((item: Favorites) => {
               const track = item.track;
               return track?.id;
             });
 
-            setFavorites(tracks);
+            setTracksFavorites(tracks);
           }
           if (type === "album") {
             const albums = response?.items?.map((item: Favorites) => {
@@ -47,7 +77,7 @@ export const MediaControls = ({ id, type }: Props) => {
 
               return album?.id;
             });
-            setFavorites(albums);
+            setAlbumsFavorites(albums);
           }
           if (type === "artist") {
             const artists = response?.artists?.items?.map(
@@ -55,10 +85,13 @@ export const MediaControls = ({ id, type }: Props) => {
                 return item.id;
               }
             );
-            setFavorites(artists);
+            setArtistsFavorites(artists);
           }
         } catch (error) {
-          console.error("Error al obtener las canciones favoritas:", error);
+          addAlert({
+            msg: "Error al obtener las canciones favoritas",
+            severity: "error",
+          });
         } finally {
         }
       };
@@ -82,7 +115,6 @@ export const MediaControls = ({ id, type }: Props) => {
         severity: "success",
       });
     } catch (error) {
-      console.error("Error al agregar a favoritos:", error);
       addAlert({
         msg: "Error al agregar a favoritos",
         severity: "error",
@@ -109,12 +141,26 @@ export const MediaControls = ({ id, type }: Props) => {
 
   return (
     <div className="flex items-center space-x-4 mb-8">
-      <button className=" text-black font-semibold p-3 rounded-full hover:scale-105 transition">
-        <IoPlayCircleSharp className="text-[#61e055] w-14 h-14" />
-      </button>
+      <div>
+        {!currentPlaying?.pausing && id === currentPlaying?.id ? (
+          <IoPauseCircleSharp
+            onClick={() => changeState(false)}
+            size={60}
+            className="cursor-pointer text-green-500 hover:scale-110"
+          />
+        ) : (
+          <IoPlayCircleSharp
+            className="cursor-pointer text-green-500 hover:scale-110"
+            onClick={() => changeState(true)}
+            size={60}
+          />
+        )}
+      </div>
       {type === "album" || type === "track" ? (
         <div>
-          {favorites?.includes(id) ? (
+          {type === "track" ? (
+            tracksFavorites?.includes(id)
+          ) : albumsFavorites?.includes(id) ? (
             <HiCheckCircle
               onClick={removeFavorite}
               className="text-green-400 transition-all cursor-pointer"
@@ -130,10 +176,12 @@ export const MediaControls = ({ id, type }: Props) => {
         </div>
       ) : (
         <button
-          onClick={favorites?.includes(id) ? removeFavorite : addFavorite}
+          onClick={
+            artistsFavorites?.includes(id) ? removeFavorite : addFavorite
+          }
           className="border border-gray-300 text-white font-semibold py-2 px-6 rounded-full hover:bg-white hover:text-black transition"
         >
-          {favorites?.includes(id) ? "Siguiendo" : "Seguir"}
+          {artistsFavorites?.includes(id) ? "Siguiendo" : "Seguir"}
         </button>
       )}
     </div>

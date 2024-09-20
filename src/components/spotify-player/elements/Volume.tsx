@@ -8,7 +8,7 @@ import { FiVolume1 } from "react-icons/fi";
 export const Volume = () => {
   const { data: session } = useSession();
   const { currentPlaying } = usePlayerStore();
-  console.log("🚀 ~ Volume ~ currentPlaying:", currentPlaying);
+
   const setVolume = async (e: React.MouseEvent<HTMLInputElement>) => {
     const target = e.target as HTMLInputElement;
     await setChangeVolume(

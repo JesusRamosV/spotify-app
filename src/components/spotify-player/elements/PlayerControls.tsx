@@ -6,7 +6,7 @@ import {
   setChangeState,
   setChangeTrack,
 } from "@/services/services";
-import { usePlayerStore } from "@/store";
+import { usePlayerStore, useSnackbarStore } from "@/store";
 import { useSession } from "next-auth/react";
 import React from "react";
 import {
@@ -18,9 +18,9 @@ import { CgPlayTrackNext, CgPlayTrackPrev } from "react-icons/cg";
 import { FiRepeat } from "react-icons/fi";
 
 export const PlayerControls = () => {
-  const { currentPlaying, playerState, setPlayerState, setPlaying } =
-    usePlayerStore();
+  const { currentPlaying, setPlaying } = usePlayerStore();
   const { data: session } = useSession();
+  const { addAlert } = useSnackbarStore();
 
   const changeTrack = async (type: string) => {
     if (session?.accessToken) {
@@ -45,14 +45,13 @@ export const PlayerControls = () => {
           });
         }
       } catch (error) {
-        console.error("Error al cambiar de canción:", error);
+        addAlert({ msg: "Error al cambiar de canción", severity: "error" });
       }
     }
   };
 
   const changeState = async (state: boolean) => {
     await setChangeState(session?.accessToken as string, state);
-    setPlayerState(!playerState);
   };
   return (
     <div className="flex items-center gap-2">

@@ -3,6 +3,7 @@
 import { Pagination, SongList, SongListSkeletonWrapper } from "@/components";
 import { labels, Tracks, TypeSearch } from "@/interfaces/MainPage.interface";
 import { searchSpotify } from "@/services/services";
+import { useSnackbarStore } from "@/store";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
@@ -20,6 +21,7 @@ export const Songs = ({ songs }: Props) => {
   const [totalPages, setTotalPages] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const { data: session } = useSession();
+  const { addAlert } = useSnackbarStore();
 
   useEffect(() => {
     if (songs && session?.accessToken) {
@@ -41,7 +43,7 @@ export const Songs = ({ songs }: Props) => {
       setResults(data.tracks);
       setTotalPages(Math.ceil(data.tracks.total / TOTAL_PAGE_SIZE));
     } catch (error) {
-      console.error("Error al buscar:", error);
+      addAlert({ msg: "Error al buscar las canciones", severity: "error" });
     } finally {
       setIsLoading(false);
     }
