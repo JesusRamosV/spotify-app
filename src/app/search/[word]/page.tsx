@@ -5,7 +5,7 @@ interface Props {
     word: string;
   };
 }
-export default function SearchLists({ params }: Props) {
+export default function Page({ params }: Props) {
   return (
     <main className="flex-1 overflow-y-auto">
       {<SearchList wordSearch={params.word} />}
